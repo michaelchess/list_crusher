@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<head>
+	<title>List Crusher</title>
+	<h2>List Crusher:</h2>
+</head>
+<body>
+	<p>List Crusher is a tool to determine whether a set of de novo mutations </p>
+	<form action="{{ url_for('runCrusher') }}" enctype="multipart/form-data" method="POST" class=uploadFile>
+		<dl>
+			<dt>(Please be sure that your mutations file contains only one gene and one of its associated mutations per line)
+			<dt>(And please be sure that your area of interest file contatins a list with one gene per line)
+			<dt>(The Excel specialty format 'Tab Delimited Text (.txt)' is recommended)
+			<dt><a href="{{ url_for('exampleDownload') }}">
+					<button type="button">Download Example Input de Novos</button>
+				</a>
+			<dt><a href="{{ url_for('areaInterestExample') }}">
+					<button type="button">Download Example Area of Interest</button>
+				</a>
+			<dt>--------------------------------------------------------------------------------
+			<dt><b>Please submit your data:</b>
+			<dd>Your mutations file:<input type="file" name="userData">
+			<dd>Your area of interest:<input type="file" name="userInterest">
+			<dd><input type="submit" value="Submit">
+		</dl>
+	</form>
+</body>
