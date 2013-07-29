@@ -138,17 +138,18 @@ def find_mut_prob(prob_file, gene_list):
                 syn_list = add_prob(syn_list, entry[5])
 
                 seen_genes.append(gene)
-    returnString = ''
+    
+    notFoundList = ''
     if len(seen_genes) != len(gene_list):
         for item in gene_list:
             if item not in seen_genes:
                 not_found.append(item)
 
-        returnString+='Could not find probabilities for these genes:\n'
-        returnString+='{0}\n'.format('\n'.join(not_found))
+        notFoundList+='Could not find probabilities for these genes:\n'
+        notFoundList+='{0}\n'.format('\n'.join(not_found))
 
     return (lof_list, lof_total, mis_list, mis_total, syn_list, syn_total,
-            not_found, returnString)
+            not_found, notFoundList)
 
 
 def main(preds, dnm, loi):
@@ -160,7 +161,7 @@ def main(preds, dnm, loi):
     (p_lof_list, p_lof_total,
      p_mis_list, p_mis_total,
      p_syn_list, p_syn_total,
-     not_found_genes, returnString) = find_mut_prob(preds, interest_list)
+     not_found_genes, notFoundList) = find_mut_prob(preds, interest_list)
 
     # Determine overlap between de novo list and input list
     (lof_overlap, lof_overlap_list) = list_comparison(dn_lof, interest_list,
@@ -193,6 +194,7 @@ def main(preds, dnm, loi):
     fold_syn = (float(syn_overlap)/syn_num) / exp_per_syn
 
     # Print results
+    returnString = ''
     returnString+='Significance for LoF overlap: {0}'.format(p_lof)
     returnString+='\n'
     #if print_overlap:
@@ -228,6 +230,7 @@ def main(preds, dnm, loi):
     returnString+='\n'
     returnString+='\tFold enrichment: {0}'.format(fold_syn)
     returnString+='\n'
+    returnString+= notFoundList
     return returnString
 
 '''

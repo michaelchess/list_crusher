@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 
 <head>
+	<title>List Crusher</title>
 </head>
 <body>
+	<h2>Lists have been crushed</h2>
 	{% for line in results: %}
-		<pre><p style="padding: 0px;">{{line}}</p></pre>
+		{% if line|length >= 3: %}
+			<pre><p style="padding: 0px;">{{line}}</p></pre>
+		{% else: %}
+			<pre><p style="padding: 0px;"><b>{{line[0]}}</b>{{line[1]}}</p></pre>
+		{% endif %}
 	{% endfor %}
 
 

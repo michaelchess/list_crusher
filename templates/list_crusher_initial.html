@@ -5,7 +5,7 @@
 	<h2>List Crusher:</h2>
 </head>
 <body>
-	<p>List Crusher is a tool to determine whether a set of de novo mutations </p>
+	<p>List Crusher is a tool to determine whether a set of de novo mutations falls on a set of the genome more than would be expected by chance.<br>The program takes a list of mutations and a list of genes of interest and returns a set of statistical analyses.</p>
 	<form action="{{ url_for('runCrusher') }}" enctype="multipart/form-data" method="POST" class=uploadFile>
 		<dl>
 			<dt>(Please be sure that your mutations file contains only one gene and one of its associated mutations per line)

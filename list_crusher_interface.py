@@ -36,6 +36,27 @@ def runCrusher():
 		return "Your area of interest file was of an incorrect type, please change file type to .txt and try again."
 	crushed_results = list_crusher3_5.main('fixed_mut_prob_fs_adjdepdiv.txt', dataName, interestName)
 	split_crushed_results = crushed_results.split('\n')
+	'''for line in split_crushed_results:
+		if ':' in line:
+			print line
+			line = line.split(':')
+			line[0] = '<b>'+line[0]
+			line[0] += ':</b>'
+			line = line[0]+line[1]
+			print line
+		line = '<pre><p style="padding: 0px;">'+line+'</p></pre>'
+		'''
+	for num in range(0, len(split_crushed_results)):
+		if ':' in split_crushed_results[num]:
+			print split_crushed_results[num]
+			split_crushed_results[num] = split_crushed_results[num].split(':')
+			#split_crushed_results[num][0] = '<b>'+split_crushed_results[num][0]
+			#split_crushed_results[num][0] += ':</b>'
+			#split_crushed_results[num] = split_crushed_results[num][0]+split_crushed_results[num][1]
+			split_crushed_results[num][0] += ':'
+			print split_crushed_results[num]
+		#split_crushed_results[num] = '<pre><p style="padding: 0px;">'+split_crushed_results[num]+'</p></pre>'
+	print split_crushed_results
 	return render_template('list_crusherHTML.html', results=split_crushed_results)
 
 @app.route('/exampleData')
