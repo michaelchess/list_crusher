@@ -15,17 +15,20 @@
 					<button type="button">Download Example Input de Novos</button>
 				</a>
 			<dt><a href="{{ url_for('areaInterestExample') }}">
-					<button type="button">Download Example Area of Interest</button>
+					<button type="button">Download Example Area of Interest (Constrained Genes)</button>
 				</a>
 			<dt>--------------------------------------------------------------------------------
 			<dt><b>Please submit your data:</b>
 			<dd>Your mutations file:<input type="file" name="userData">
-			<dd>or:
-			<dd>Chose one: <select>
-								<option>Autism
-								<option>Intellectual Disability
-								</select>
+			<dd><p>
 			<dd>Your area of interest:<input type="file" name="userInterest">
+			<dd>or:
+			<dd>Chose a pre-made area of interest: <select name="selectInterest">
+								<option value="choose">Please choose one:
+								<option value="const">Constrained
+								<option value="FMRP">FMRP
+								<option value="ASD">ASD Related (Betancur)
+								</select>
 			<dd><input type="submit" value="Submit">
 		</dl>
 	</form>

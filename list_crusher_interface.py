@@ -59,18 +59,26 @@ def allowedFile(filename):#checks if uploaded file is of the correct type
 
 @app.route('/crushlists', methods=['POST'])
 def runCrusher():
+	print request.form['selectInterest']
 	userData = request.files['userData']#get file from browser request
-	userInterest = request.files['userInterest']
 	if userData and allowedFile(userData.filename):
 		dataName = secure_filename(userData.filename)
 		userData.save(os.path.join(app.config['UPLOAD_FOLDER'], dataName))#save user data
 	else:
 		return "Your mutation list file was of an incorrect type, please change file type to .txt and try again."
-	if userInterest and allowedFile(userData.filename):
-		interestName = secure_filename(userInterest.filename)
-		userInterest.save(os.path.join(app.config['UPLOAD_FOLDER'], interestName))#save user data
+	if request.form['selectInterest'] == 'choose':
+		userInterest = request.files['userInterest']
+		if userInterest and allowedFile(userData.filename):
+			interestName = secure_filename(userInterest.filename)
+			userInterest.save(os.path.join(app.config['UPLOAD_FOLDER'], interestName))#save user data
+		else:
+			return "Your area of interest file was of an incorrect type, please change file type to .txt and try again."
+	elif request.form['selectInterest'] == 'ASD':
+		interestName = 'data/betancur_asd110_list.txt'
+	elif request.form['selectInterest'] == 'FMRP':
+		interestName = 'data/fmrp_list_edited.txt'
 	else:
-		return "Your area of interest file was of an incorrect type, please change file type to .txt and try again."
+		interestName = 'data/constrained_1003.txt'
 	crushed_results = list_crusher3_5.main('fixed_mut_prob_fs_adjdepdiv.txt', dataName, interestName)
 	split_crushed_results = crushed_results.split('\n')
 	'''for line in split_crushed_results:
@@ -99,13 +107,17 @@ def runCrusher():
 @app.route('/exampleData')
 def exampleDownload():
 	exampleData = open('exampleData.txt', 'r')
-	return send_file(exampleData, attachment_filename="ExampleInputData.txt", as_attachment=True)
+	time = datetime.now()
+	splitTime = str(time).rsplit('.', 1)[0]
+	return send_file(exampleData, attachment_filename="ExampleInputData "+splitTime+".txt", as_attachment=True)
 #python list_crusher3_5.py fixed_mut_prob_fs_adjdepdiv.txt examplefile.txt fmrp_list_edited.txt -p
 
 @app.route('/areaInterestExample')
 def areaInterestExample():
-	areaInterestExample = open('fmrp_list_edited.txt', 'r')
-	return send_file(areaInterestExample, attachment_filename="ExampleAreaOfInterest", as_attachment=True)
+	areaInterestExample = open('data/constrained_1003.txt', 'r')
+	time = datetime.now()
+	splitTime = str(time).rsplit('.', 1)[0]
+	return send_file(areaInterestExample, attachment_filename="ExampleAreaOfInterest "+splitTime+".txt", as_attachment=True)
 
 if __name__ == '__main__':
 	app.run(SERVER_NAME, SERVER_PORT)
