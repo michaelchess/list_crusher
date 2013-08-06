@@ -8,9 +8,9 @@
 	<p>List Crusher is a tool to determine whether a set of de novo mutations falls on a set of the genome more than would be expected by chance.<br>The program takes a list of mutations and a list of genes of interest and returns a set of statistical analyses.</p>
 	<form action="{{ url_for('runCrusher') }}" enctype="multipart/form-data" method="POST" class=uploadFile>
 		<dl>
-			<dt>(Please be sure that your mutations file contains only one gene and one of its associated mutations per line)
-			<dt>(And please be sure that your area of interest file contatins a list with one gene per line)
-			<dt>(The Excel specialty format 'Tab Delimited Text (.txt)' is recommended)
+			<dt>Please be sure that your mutations file contains only one gene and one of its associated mutations per line
+			<dt>And please be sure that your area of interest file contatins a list with one gene per line
+			<dt>The Excel specialty format 'Tab Delimited Text (.txt)' is recommended
 			<dt><a href="{{ url_for('exampleDownload') }}">
 					<button type="button">Download Example Input de Novos</button>
 				</a>
@@ -20,6 +20,11 @@
 			<dt>--------------------------------------------------------------------------------
 			<dt><b>Please submit your data:</b>
 			<dd>Your mutations file:<input type="file" name="userData">
+			<dd>or:
+			<dd>Chose one: <select>
+								<option>Autism
+								<option>Intellectual Disability
+								</select>
 			<dd>Your area of interest:<input type="file" name="userInterest">
 			<dd><input type="submit" value="Submit">
 		</dl>
