@@ -4,6 +4,8 @@ import list_crusher3_5
 import tempfile
 from werkzeug import secure_filename
 import os
+from datetime import datetime
+
 
 DEBUG = True
 UPLOAD_FOLDER = os.getcwd()#datasaving folder path
@@ -93,16 +95,37 @@ def runCrusher():
 		'''
 	for num in range(0, len(split_crushed_results)):
 		if ':' in split_crushed_results[num]:
-			print split_crushed_results[num]
+			#print split_crushed_results[num]
 			split_crushed_results[num] = split_crushed_results[num].split(':')
-			#split_crushed_results[num][0] = '<b>'+split_crushed_results[num][0]
-			#split_crushed_results[num][0] += ':</b>'
-			#split_crushed_results[num] = split_crushed_results[num][0]+split_crushed_results[num][1]
 			split_crushed_results[num][0] += ':'
-			print split_crushed_results[num]
-		#split_crushed_results[num] = '<pre><p style="padding: 0px;">'+split_crushed_results[num]+'</p></pre>'
-	print split_crushed_results
+			if 'mutation' in split_crushed_results[num][0]:
+				print 'newsection'
+				splitGeneList = split_crushed_results[num][1].split(', ')
+				for gene in splitGeneList:
+					if split_crushed_results[num][1].count(gene) > 1:
+						print split_crushed_results[num][1]
+						inst = split_crushed_results[num][1].count(gene)
+						split_crushed_results[num][1] = split_crushed_results[num][1].replace(gene, gene+'('+str(inst)+')', 1)
+						split_crushed_results[num][1] = split_crushed_results[num][1].replace(gene+', ', '')
+						print split_crushed_results[num][1]
+					splitGeneList = split_crushed_results[num][1].split(', ')
+			else:
+				split_crushed_results[num][1] = split_crushed_results[num][1].replace(' ', '')
+				scrn = split_crushed_results[num][1]
+				print "SCRN "+scrn
+				try:
+					split_crushed_results[num][1] = str(round_to_n(float(scrn.strip()), 3))
+				except ValueError:
+					print scrn
 	return render_template('list_crusherHTML.html', results=split_crushed_results)
+
+def round_to_n(x, n):
+    if n < 1:
+        raise ValueError("number of significant digits must be >= 1")
+    # Use %e format to get the n most significant digits, as a string.
+    format = "%." + str(n-1) + "e"
+    as_string = format % x
+    return float(as_string)
 
 @app.route('/exampleData')
 def exampleDownload():

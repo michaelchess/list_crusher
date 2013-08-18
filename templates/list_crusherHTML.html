@@ -7,9 +7,9 @@
 	<h2>Lists have been crushed</h2>
 	{% for line in results: %}
 		{% if line|length >= 3: %}
-			<pre><p style="padding: 0px;">{{line}}</p></pre>
+			<p style="padding: 0px;"><pre>{{line}}</pre></p>
 		{% else: %}
-			<pre><p style="padding: 0px;"><b>{{line[0]}}</b>{{line[1]}}</p></pre>
+			<p style="padding: 0px;"><pre><b>{{line[0]}}</b>{{line[1]}}</pre></p>
 		{% endif %}
 	{% endfor %}
 
