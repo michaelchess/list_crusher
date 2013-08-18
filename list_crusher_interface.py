@@ -1,3 +1,25 @@
+'''
+list_crusher_interface.py was developed as a way to make the 'list crusher' script, developed by
+Kaitlin Samocha available online.  The 'list crusher' script takes a list of de novo mutations and
+a list of genes of interest and returns information regarding whether or not the de novos cited fall
+in the genes of interest more than would be expected by chance.
+
+Required local software:
+	See requirements.txt
+
+Required files:
+	A 'templates' directory containing:
+		list_crusher_initial.html
+		list_crusherHTML.html
+	A 'data' directory containing:
+		betancur_asd110_list.txt
+		constrained.txt
+		fmrp_list_edited.txt
+	exampleData.txt
+	fixed_mut_prob_fs_adjdepdiv.txt
+	list_crusher3_5.py
+'''
+
 from flask import Flask, request, Response, session, g, redirect, url_for, \
 	abort, render_template, flash, send_from_directory, send_file
 import list_crusher3_5
@@ -17,7 +39,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER#configuring file to save data
 SERVER_NAME = '127.0.0.1'
 SERVER_PORT = 5001
 
-# set the secret key.  keep this really secret:
+# set the secret key (keep this the same as other utilities to have cross utility logins)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 @app.route('/')
@@ -59,9 +81,13 @@ def allowedFile(filename):#checks if uploaded file is of the correct type
 	return '.' in filename and \
 		filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
+
+#This function basically handles everything
 @app.route('/crushlists', methods=['POST'])
 def runCrusher():
 	print request.form['selectInterest']
+	
+	#This section gets checks and saves user files
 	userData = request.files['userData']#get file from browser request
 	if userData and allowedFile(userData.filename):
 		dataName = secure_filename(userData.filename)
@@ -81,18 +107,12 @@ def runCrusher():
 		interestName = 'data/fmrp_list_edited.txt'
 	else:
 		interestName = 'data/constrained_1003.txt'
+	
+	#Next line runs the actual file
 	crushed_results = list_crusher3_5.main('fixed_mut_prob_fs_adjdepdiv.txt', dataName, interestName)
+	
+	#The rest of the function is just text processing
 	split_crushed_results = crushed_results.split('\n')
-	'''for line in split_crushed_results:
-		if ':' in line:
-			print line
-			line = line.split(':')
-			line[0] = '<b>'+line[0]
-			line[0] += ':</b>'
-			line = line[0]+line[1]
-			print line
-		line = '<pre><p style="padding: 0px;">'+line+'</p></pre>'
-		'''
 	for num in range(0, len(split_crushed_results)):
 		if ':' in split_crushed_results[num]:
 			#print split_crushed_results[num]
@@ -119,10 +139,10 @@ def runCrusher():
 					print scrn
 	return render_template('list_crusherHTML.html', results=split_crushed_results)
 
+
 def round_to_n(x, n):
     if n < 1:
         raise ValueError("number of significant digits must be >= 1")
-    # Use %e format to get the n most significant digits, as a string.
     format = "%." + str(n-1) + "e"
     as_string = format % x
     return float(as_string)
@@ -133,7 +153,6 @@ def exampleDownload():
 	time = datetime.now()
 	splitTime = str(time).rsplit('.', 1)[0]
 	return send_file(exampleData, attachment_filename="ExampleInputData "+splitTime+".txt", as_attachment=True)
-#python list_crusher3_5.py fixed_mut_prob_fs_adjdepdiv.txt examplefile.txt fmrp_list_edited.txt -p
 
 @app.route('/areaInterestExample')
 def areaInterestExample():
@@ -143,4 +162,4 @@ def areaInterestExample():
 	return send_file(areaInterestExample, attachment_filename="ExampleAreaOfInterest "+splitTime+".txt", as_attachment=True)
 
 if __name__ == '__main__':
-	app.run(SERVER_NAME, SERVER_PORT)
+	app.run()
